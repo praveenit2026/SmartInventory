@@ -1,0 +1,27 @@
+# Maven build directories
+target/
+*.war
+*.ear
+*.zip
+*.tar.gz
+*.rar
+
+# Compiled Java class files
+*.class
+
+# IDE-specific configurations
+.settings/
+.project
+.classpath
+.factorypath
+.recommenders/
+*.iml
+.idea/
+*.suo
+*.ntvs*
+*.njsproj
+*.sln
+*.sw?
+
+# Log files
+*.log
