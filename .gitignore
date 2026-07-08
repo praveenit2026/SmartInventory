@@ -5,6 +5,7 @@ target/
 *.zip
 *.tar.gz
 *.rar
+maven/
 
 # Compiled Java class files
 *.class
@@ -25,3 +26,4 @@ target/
 
 # Log files
 *.log
+

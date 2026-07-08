@@ -28,7 +28,7 @@
     <% if (alerts == null || alerts.isEmpty()) { %>
         <div class="text-center py-5">
             <div class="text-success fs-1 mb-3"><i class="bi bi-shield-fill-check"></i></div>
-            <h5 class="text-white">System Status Clear</h5>
+            <h5 style="color: var(--text-main);">System Status Clear</h5>
             <p class="text-muted mb-0">No low stock items, expired products, or near-expiry batches detected.</p>
         </div>
     <% } else { %>
@@ -54,7 +54,7 @@
                     <div class="d-flex align-items-center">
                         <%= icon %>
                         <div>
-                            <div class="fw-semibold text-white d-flex align-items-center gap-2">
+                            <div class="fw-semibold d-flex align-items-center gap-2" style="color: var(--text-main);">
                                 <%= title %>
                                 <% if (!a.isRead()) { %>
                                     <span class="badge bg-danger p-1" style="font-size: 0.6rem; text-transform: uppercase;">New</span>
@@ -64,7 +64,7 @@
                             <div class="alert-meta">
                                 <span><i class="bi bi-clock me-1"></i><%= a.getCreatedAt().toString().substring(0, 16) %></span>
                                 <span class="mx-2">•</span>
-                                <span class="text-white fw-medium"><%= a.getSku() %> | <%= a.getProductName() %></span>
+                                <span class="fw-medium" style="color: var(--text-main);"><%= a.getSku() %> | <%= a.getProductName() %></span>
                             </div>
                         </div>
                     </div>

@@ -43,6 +43,16 @@
         <url-pattern>/transactions/*</url-pattern>
     </servlet-mapping>
 
+    <!-- Stock Sales / Billing Servlet -->
+    <servlet>
+        <servlet-name>StockSalesServlet</servlet-name>
+        <servlet-class>com.smartinventory.servlet.StockSalesServlet</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>StockSalesServlet</servlet-name>
+        <url-pattern>/stock-sales/*</url-pattern>
+    </servlet-mapping>
+
     <!-- Alert / Notification Servlet -->
     <servlet>
         <servlet-name>AlertServlet</servlet-name>

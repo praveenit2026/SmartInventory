@@ -33,8 +33,14 @@
         </li>
         <li>
             <a href="<%= request.getContextPath() %>/transactions" 
-               class="sidebar-link <%= "transactions".equals(activePage) ? "active" : "" %>">
-                <i class="bi bi-arrow-down-up"></i> Stock In/Out
+               class="sidebar-link <%= ("transactions".equals(activePage) || "stock-in".equals(activePage)) ? "active" : "" %>">
+                <i class="bi bi-arrow-down-left-circle-fill"></i> Stock In
+            </a>
+        </li>
+        <li>
+            <a href="<%= request.getContextPath() %>/stock-sales" 
+               class="sidebar-link <%= "stock-sales".equals(activePage) ? "active" : "" %>">
+                <i class="bi bi-cart-fill"></i> Stock Sales
             </a>
         </li>
         <li>

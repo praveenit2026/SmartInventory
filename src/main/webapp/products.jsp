@@ -30,18 +30,18 @@
 
 <!-- Alerts Panel -->
 <% if (success != null) { %>
-    <div class="alert alert-success alert-dismissible fade show border-0 rounded-3 mb-4" role="alert" style="background: rgba(0, 230, 118, 0.12); color: #80ffd4; font-size: 0.9rem;">
+    <div class="alert alert-success alert-dismissible fade show rounded-3 mb-4" role="alert" style="background: #d1fae5; color: #065f46; border: 1px solid #6ee7b7; font-size: 0.9rem;">
         <i class="bi bi-check-circle-fill me-2 fs-5"></i>
         <%= success %>
-        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close" style="filter: invert(1);"></button>
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
     </div>
 <% } %>
 
 <% if (error != null) { %>
-    <div class="alert alert-danger alert-dismissible fade show border-0 rounded-3 mb-4" role="alert" style="background: rgba(255, 82, 82, 0.15); color: #ff8080; font-size: 0.9rem;">
+    <div class="alert alert-danger alert-dismissible fade show rounded-3 mb-4" role="alert" style="background: #fee2e2; color: #b91c1c; border: 1px solid #fca5a5; font-size: 0.9rem;">
         <i class="bi bi-exclamation-triangle-fill me-2 fs-5"></i>
         <%= error %>
-        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close" style="filter: invert(1);"></button>
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
     </div>
 <% } %>
 
@@ -50,18 +50,28 @@
     <div class="row g-3">
         <div class="col-md-7">
             <div class="input-group">
-                <span class="input-group-text border-0" style="background: rgba(15,23,42,0.6); color: var(--text-muted);"><i class="bi bi-search"></i></span>
-                <input type="text" id="searchInput" class="form-control" placeholder="Search by SKU, Product Name, Category...">
+                <span class="input-group-text" style="background: #f1f5f9; border: 1px solid #cbd5e1; border-right: none; color: var(--text-muted);"><i class="bi bi-search"></i></span>
+                <input type="text" id="searchInput" class="form-control" placeholder="Search by SKU, Product Name, Category..." style="border-left: none;">
             </div>
         </div>
         <div class="col-md-5">
             <div class="input-group">
-                <span class="input-group-text border-0" style="background: rgba(15,23,42,0.6); color: var(--text-muted);"><i class="bi bi-funnel-fill"></i></span>
-                <select id="categoryFilter" class="form-select">
+                <span class="input-group-text" style="background: #f1f5f9; border: 1px solid #cbd5e1; border-right: none; color: var(--text-muted);"><i class="bi bi-funnel-fill"></i></span>
+                <select id="categoryFilter" class="form-select" style="border-left: none;">
                     <option value="">All Categories</option>
-                    <option value="Electronics">Electronics</option>
-                    <option value="Pharmaceuticals">Pharmaceuticals</option>
-                    <option value="Office Supplies">Office Supplies</option>
+                    <option value="Fresh Produce">Fresh Produce</option>
+                    <option value="Dairy & Eggs">Dairy &amp; Eggs</option>
+                    <option value="Meat & Seafood">Meat &amp; Seafood</option>
+                    <option value="Bakery & Bread">Bakery &amp; Bread</option>
+                    <option value="Beverages">Beverages</option>
+                    <option value="Snacks & Confectionery">Snacks &amp; Confectionery</option>
+                    <option value="Frozen Foods">Frozen Foods</option>
+                    <option value="Grains & Pulses">Grains &amp; Pulses</option>
+                    <option value="Canned & Packaged">Canned &amp; Packaged</option>
+                    <option value="Personal Care">Personal Care</option>
+                    <option value="Cleaning & Household">Cleaning &amp; Household</option>
+                    <option value="Baby Products">Baby Products</option>
+                    <option value="Health & Wellness">Health &amp; Wellness</option>
                 </select>
             </div>
         </div>
@@ -101,13 +111,13 @@
                         }
                 %>
                     <tr class="product-row" data-category="<%= p.getCategory() %>">
-                        <td class="fw-bold text-white search-sku"><%= p.getSku() %></td>
+                        <td class="fw-bold search-sku"><%= p.getSku() %></td>
                         <td class="search-name">
-                            <div class="fw-semibold text-white"><%= p.getName() %></div>
+                            <div class="fw-semibold"><%= p.getName() %></div>
                             <div class="text-muted fs-7"><%= p.getDescription() != null ? p.getDescription() : "" %></div>
                         </td>
-                        <td class="search-category"><span class="badge bg-secondary py-1 px-2"><%= p.getCategory() %></span></td>
-                        <td class="fw-semibold text-white">INR <%= String.format("%,.2f", p.getPrice()) %></td>
+                        <td class="search-category"><span class="badge" style="background:#eff6ff;color:#1a3f6f;border:1px solid #bfdbfe;font-size:.72rem;padding:4px 10px;"><%= p.getCategory() %></span></td>
+                        <td class="fw-semibold">INR <%= String.format("%,.2f", p.getPrice()) %></td>
                         <td><%= stockBadge %></td>
                         <td><%= p.getSupplierName() != null ? p.getSupplierName() : "<span class='text-muted fs-7'>None</span>" %></td>
                         <td class="fs-7 <%= p.getExpiryDate() != null ? "text-warning" : "text-muted" %>">
@@ -154,8 +164,8 @@
     <div class="modal-dialog modal-lg modal-dialog-centered">
         <div class="modal-content glass-panel">
             <div class="modal-header border-0">
-                <h5 class="modal-title text-white" id="addProductModalLabel"><i class="bi bi-plus-circle me-2 text-primary"></i>Add Product</h5>
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close" style="filter: invert(1);"></button>
+                <h5 class="modal-title" id="addProductModalLabel"><i class="bi bi-plus-circle me-2" style="color:var(--blue);"></i>Add Product</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <form action="<%= request.getContextPath() %>/products/add" method="POST">
                 <div class="modal-body">
@@ -171,9 +181,20 @@
                         <div class="col-md-6">
                             <label for="addCategory" class="form-label">Category</label>
                             <select class="form-select" id="addCategory" name="category" required>
-                                <option value="Electronics">Electronics</option>
-                                <option value="Pharmaceuticals">Pharmaceuticals</option>
-                                <option value="Office Supplies">Office Supplies</option>
+                                <option value="">-- Select Category --</option>
+                                <option value="Fresh Produce">Fresh Produce</option>
+                                <option value="Dairy & Eggs">Dairy &amp; Eggs</option>
+                                <option value="Meat & Seafood">Meat &amp; Seafood</option>
+                                <option value="Bakery & Bread">Bakery &amp; Bread</option>
+                                <option value="Beverages">Beverages</option>
+                                <option value="Snacks & Confectionery">Snacks &amp; Confectionery</option>
+                                <option value="Frozen Foods">Frozen Foods</option>
+                                <option value="Grains & Pulses">Grains &amp; Pulses</option>
+                                <option value="Canned & Packaged">Canned &amp; Packaged</option>
+                                <option value="Personal Care">Personal Care</option>
+                                <option value="Cleaning & Household">Cleaning &amp; Household</option>
+                                <option value="Baby Products">Baby Products</option>
+                                <option value="Health & Wellness">Health &amp; Wellness</option>
                             </select>
                         </div>
                         <div class="col-md-6">
@@ -190,7 +211,7 @@
                         </div>
                         <div class="col-md-6">
                             <label for="addExpiry" class="form-label">Expiry Date (Optional)</label>
-                            <input type="date" class="form-control" id="addExpiry" name="expiryDate">
+                            <input type="date" class="form-control date-input" id="addExpiry" name="expiryDate">
                         </div>
                         <div class="col-md-6">
                             <label for="addSupplier" class="form-label">Supplier Partner</label>
@@ -223,8 +244,8 @@
     <div class="modal-dialog modal-lg modal-dialog-centered">
         <div class="modal-content glass-panel">
             <div class="modal-header border-0">
-                <h5 class="modal-title text-white" id="editProductModalLabel"><i class="bi bi-pencil-square me-2 text-primary"></i>Modify Product</h5>
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close" style="filter: invert(1);"></button>
+                <h5 class="modal-title" id="editProductModalLabel"><i class="bi bi-pencil-square me-2" style="color:var(--blue);"></i>Modify Product</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <form action="<%= request.getContextPath() %>/products/update" method="POST">
                 <input type="hidden" id="editId" name="id">
@@ -232,7 +253,7 @@
                     <div class="row g-3">
                         <div class="col-md-6">
                             <label for="editSku" class="form-label">SKU Code</label>
-                            <input type="text" class="form-control" id="editSku" name="sku" readonly required style="background: rgba(255,255,255,0.03); opacity: 0.7;">
+                            <input type="text" class="form-control" id="editSku" name="sku" readonly required style="background: #f1f5f9; opacity: 0.7;">
                         </div>
                         <div class="col-md-6">
                             <label for="editName" class="form-label">Product Name</label>
@@ -241,9 +262,19 @@
                         <div class="col-md-6">
                             <label for="editCategory" class="form-label">Category</label>
                             <select class="form-select" id="editCategory" name="category" required>
-                                <option value="Electronics">Electronics</option>
-                                <option value="Pharmaceuticals">Pharmaceuticals</option>
-                                <option value="Office Supplies">Office Supplies</option>
+                                <option value="Fresh Produce">Fresh Produce</option>
+                                <option value="Dairy & Eggs">Dairy &amp; Eggs</option>
+                                <option value="Meat & Seafood">Meat &amp; Seafood</option>
+                                <option value="Bakery & Bread">Bakery &amp; Bread</option>
+                                <option value="Beverages">Beverages</option>
+                                <option value="Snacks & Confectionery">Snacks &amp; Confectionery</option>
+                                <option value="Frozen Foods">Frozen Foods</option>
+                                <option value="Grains & Pulses">Grains &amp; Pulses</option>
+                                <option value="Canned & Packaged">Canned &amp; Packaged</option>
+                                <option value="Personal Care">Personal Care</option>
+                                <option value="Cleaning & Household">Cleaning &amp; Household</option>
+                                <option value="Baby Products">Baby Products</option>
+                                <option value="Health & Wellness">Health &amp; Wellness</option>
                             </select>
                         </div>
                         <div class="col-md-6">
@@ -260,7 +291,7 @@
                         </div>
                         <div class="col-md-6">
                             <label for="editExpiry" class="form-label">Expiry Date (Optional)</label>
-                            <input type="date" class="form-control" id="editExpiry" name="expiryDate">
+                            <input type="date" class="form-control date-input" id="editExpiry" name="expiryDate">
                         </div>
                         <div class="col-md-6">
                             <label for="editSupplier" class="form-label">Supplier Partner</label>
@@ -293,6 +324,12 @@
 <!-- Catalog Filter / Modal fill script utilities -->
 <script>
     document.addEventListener("DOMContentLoaded", function() {
+
+        // Set minimum expiry date to today (no past dates allowed)
+        const today = new Date().toISOString().split('T')[0];
+        document.getElementById("addExpiry").setAttribute("min", today);
+        document.getElementById("editExpiry").setAttribute("min", today);
+
         // Populating the Edit Modal fields automatically when clicking on edit
         const editButtons = document.querySelectorAll(".edit-btn");
         editButtons.forEach(btn => {
@@ -307,6 +344,8 @@
                 document.getElementById("editMinLevel").value = this.dataset.min;
                 document.getElementById("editExpiry").value = this.dataset.expiry;
                 document.getElementById("editSupplier").value = this.dataset.sup || "";
+                // Re-enforce min date on edit modal open
+                document.getElementById("editExpiry").setAttribute("min", today);
             });
         });
 
