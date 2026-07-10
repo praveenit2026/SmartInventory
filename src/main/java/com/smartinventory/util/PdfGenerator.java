@@ -103,7 +103,7 @@ public class PdfGenerator {
         if (billDate == null) billDate = new java.sql.Timestamp(System.currentTimeMillis());
         String dateStr = billDate.toLocalDateTime().format(DateTimeFormatter.ofPattern("dd-MM-yyyy  HH:mm"));
         document.add(new Paragraph("Date   : " + dateStr, TEXT_FONT));
-        document.add(new Paragraph("Customer: " + (customerName != null && !customerName.isBlank() ? customerName : "Walk-in Customer"), TEXT_FONT));
+        document.add(new Paragraph("Customer: " + (customerName != null && !customerName.trim().isEmpty() ? customerName : "Walk-in Customer"), TEXT_FONT));
         document.add(new Paragraph(" "));
 
         // ── Items table ────────────────────────────────────────────────────
