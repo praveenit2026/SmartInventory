@@ -74,22 +74,17 @@
         </form>
 
         <div class="mt-4 pt-3 border-top" style="border-color: #e2e8f0 !important;">
-            <div style="font-size: 0.75rem; color: var(--text-muted); font-weight: 600; text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 8px;">
-                Demo Credentials
-            </div>
-            <div class="d-flex justify-content-around text-start mt-2">
-                <div class="px-2 py-1 rounded" style="background: #f8fafc; border: 1px solid var(--glass-border); font-size: 0.75rem;">
-                    <div style="color: var(--primary); font-weight: 700;">ADMIN</div>
-                    <div style="color: var(--text-main);">User: <b>admin</b></div>
-                    <div style="color: var(--text-muted);">Pass: <b>admin123</b></div>
-                </div>
-                <div class="px-2 py-1 rounded" style="background: #f8fafc; border: 1px solid var(--glass-border); font-size: 0.75rem;">
-                    <div style="color: var(--success-green); font-weight: 700;">MANAGER</div>
-                    <div style="color: var(--text-main);">User: <b>manager</b></div>
-                    <div style="color: var(--text-muted);">Pass: <b>manager123</b></div>
-                </div>
-            </div>
+            <button type="button" class="btn btn-primary w-100" onclick="loginDemo('demo','demo123')">
+                <i class="bi bi-play-circle-fill me-2"></i>Demo
+            </button>
         </div>
+        <script>
+            function loginDemo(user, pass) {
+                document.getElementById('username').value = user;
+                document.getElementById('password').value = pass;
+                document.querySelector('form').submit();
+            }
+        </script>
     </div>
 
     <!-- Bootstrap Bundle JS -->

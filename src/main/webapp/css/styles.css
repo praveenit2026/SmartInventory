@@ -14,10 +14,10 @@
     /* Brand Blues — TillerStack palette */
     --navy:            #1a3f6f;     /* Deep header navy            */
     --navy-hover:      #142f54;
-    --blue:            #2563eb;     /* Mid CTA blue                */
-    --blue-hover:      #1d4ed8;
+    --blue:            #1a3f6f;     /* Mid CTA blue (Dark blue)    */
+    --blue-hover:      #142f54;
     --blue-light:      #eff6ff;
-    --blue-mid:        #3b82f6;
+    --blue-mid:        #1a3f6f;
 
     /* Semantic */
     --success:         #16a34a;
@@ -155,10 +155,10 @@ a { text-decoration: none; color: inherit; }
 }
 
 .sidebar-link.active {
-    background: var(--blue);
-    color: #ffffff;
+    background: #2b5082 !important; /* Beautiful dark corporate blue */
+    color: #ffffff !important;
     font-weight: 600;
-    box-shadow: 0 4px 12px rgba(37,99,235,.35);
+    box-shadow: 0 4px 12px rgba(26, 63, 111, 0.25);
 }
 
 .sidebar-link.active i { color: #ffffff; }

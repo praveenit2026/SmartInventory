@@ -11,7 +11,40 @@ import java.util.List;
 
 public class UserDAO {
 
+    private void ensureDemoUserExists() {
+        try (Connection con = ConnectionProvider.getConnection()) {
+            if (con == null) return;
+            // Alter the table to support DEMO role if not already done
+            try (PreparedStatement ps = con.prepareStatement(
+                    "ALTER TABLE users MODIFY COLUMN role ENUM('ADMIN', 'MANAGER', 'DEMO') NOT NULL")) {
+                ps.executeUpdate();
+            } catch (Exception e) {
+                // Ignore if already altered or not permitted
+            }
+            
+            // Check if demo user exists
+            boolean exists = false;
+            try (PreparedStatement ps = con.prepareStatement("SELECT COUNT(*) FROM users WHERE username = 'demo'")) {
+                try (ResultSet rs = ps.executeQuery()) {
+                    if (rs.next() && rs.getInt(1) > 0) {
+                        exists = true;
+                    }
+                }
+            }
+            
+            if (!exists) {
+                try (PreparedStatement ps = con.prepareStatement(
+                        "INSERT INTO users (username, password, fullname, role, email) VALUES ('demo', 'demo123', 'Demo User', 'DEMO', 'demo@smartinventory.com')")) {
+                    ps.executeUpdate();
+                }
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
     public User authenticate(String username, String password) {
+        ensureDemoUserExists();
         User user = null;
         String query = "SELECT * FROM users WHERE username = ? AND password = ?";
         try (Connection con = ConnectionProvider.getConnection();

@@ -17,7 +17,7 @@ CREATE TABLE users (
     username VARCHAR(50) NOT NULL UNIQUE,
     password VARCHAR(100) NOT NULL, -- Stored as plaintext or hash (e.g. SHA-256)
     fullname VARCHAR(100) NOT NULL,
-    role ENUM('ADMIN', 'MANAGER') NOT NULL,
+    role ENUM('ADMIN', 'MANAGER', 'DEMO') NOT NULL,
     email VARCHAR(100) UNIQUE,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
@@ -80,7 +80,8 @@ INSERT INTO suppliers (name, contact_person, phone, email, address) VALUES
 -- Insert Default Users (Password matches username for local convenience)
 INSERT INTO users (username, password, fullname, role, email) VALUES
 ('admin', 'admin123', 'Administrator', 'ADMIN', 'admin@smartinventory.com'),
-('manager', 'manager123', 'Inventory Manager', 'MANAGER', 'manager@smartinventory.com');
+('manager', 'manager123', 'Inventory Manager', 'MANAGER', 'manager@smartinventory.com'),
+('demo', 'demo123', 'Demo User', 'DEMO', 'demo@smartinventory.com');
 
 -- Insert Default Products (Some with low stock or near expiry to demonstrate alerts)
 INSERT INTO products (sku, name, description, category, price, stock_quantity, min_stock_level, expiry_date, supplier_id) VALUES

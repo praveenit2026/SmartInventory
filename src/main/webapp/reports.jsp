@@ -60,7 +60,7 @@
                     <th>Product</th>
                     <th>Category</th>
                     <th>Price</th>
-                    <th>Available Stock</th>
+                    <th class="text-center">Available Stock</th>
                     <th>Supplier</th>
                     <th>Status</th>
                 </tr>

@@ -32,8 +32,8 @@ public class ProductServlet extends HttpServlet {
         if (pathInfo != null && pathInfo.equals("/delete")) {
             // Access control check - Only Admin can delete products
             String role = (String) session.getAttribute("role");
-            if (!"ADMIN".equals(role)) {
-                request.setAttribute("error", "Access Denied: Only Administrators can delete products.");
+            if (!"ADMIN".equals(role) && !"DEMO".equals(role)) {
+                request.setAttribute("error", "Access Denied: Only Administrators and Demo users can delete products.");
                 listProducts(request, response);
                 return;
             }

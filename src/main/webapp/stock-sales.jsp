@@ -214,42 +214,40 @@
                 <hr style="border-color: rgba(255,255,255,0.1);">
                 <h6 class="text-muted mb-3">Add Product</h6>
                 
-                <!-- Autocomplete Search Wrapper -->
-                <div class="row g-3 mb-4 align-items-end">
-                    <div class="col-md-8 position-relative">
-                        <label for="productSearch" class="form-label">Search Product</label>
-                        <input type="text" class="form-control" id="productSearch" placeholder="Type product name or SKU..." autocomplete="off">
-                        
-                        <!-- Autocomplete Dropdown List -->
-                        <div id="autocomplete-list" class="autocomplete-list" style="display: none;"></div>
+                <!-- Search + Qty + Add to Cart on one aligned row -->
+                <div class="mb-3">
+                    <label for="productSearch" class="form-label">Search Product</label>
+                    <div class="d-flex gap-2 align-items-stretch">
+                        <!-- Autocomplete wrapper -->
+                        <div class="position-relative flex-grow-1">
+                            <input type="text" class="form-control h-100" id="productSearch" placeholder="Type product name or SKU..." autocomplete="off" style="height:46px;">
+                            <div id="autocomplete-list" class="autocomplete-list" style="display: none;"></div>
+                        </div>
+                        <!-- Quantity -->
+                        <input type="number" class="form-control" id="quantity" min="1" placeholder="Qty" style="width:90px; flex-shrink:0; height:46px;">
+                        <!-- Add to Cart button -->
+                        <button type="button" class="btn btn-sm d-flex align-items-center gap-1" id="addToCartBtn"
+                            style="background:#1a3f6f;color:#fff;font-weight:600;border:none;white-space:nowrap;padding:0 18px;height:46px;border-radius:10px;box-shadow:0 4px 12px rgba(26,63,111,0.25);flex-shrink:0;transition:background 0.18s;"
+                            onmouseover="this.style.background='#142f54'" onmouseout="this.style.background='#1a3f6f'">
+                            <i class="bi bi-plus-lg"></i> Add to Cart
+                        </button>
                     </div>
-                    
-                    <div class="col-md-4">
-                        <label for="quantity" class="form-label">Quantity</label>
-                        <input type="number" class="form-control" id="quantity" min="1" placeholder="Qty">
-                    </div>
-                </div>
-                
-                <div class="mb-4 d-flex justify-content-between align-items-center">
-                    <div id="product-meta-info" class="text-muted fs-7" style="min-height: 24px;">
-                        <!-- Selected product price/stock shown here -->
-                    </div>
-                    <button type="button" class="btn btn-primary btn-sm" id="addToCartBtn">
-                        <i class="bi bi-plus-lg me-1"></i> Add to Cart
-                    </button>
                 </div>
 
+                <!-- Selected product meta info -->
+                <div id="product-meta-info" class="text-muted mb-3" style="font-size:0.82rem; min-height:20px;"></div>
+
                 <!-- Cart Table -->
-                <div class="table-responsive-wrapper mb-4">
-                    <table class="table glass-table align-middle text-start mb-0" id="cartTable" style="display: none;">
+                <div class="table-responsive mb-4" style="overflow-x: auto; border: 1px solid var(--border); border-radius: var(--radius-sm); max-width: 100%;">
+                    <table class="table glass-table align-middle text-start mb-0" id="cartTable" style="display: none; width: 100%; min-width: 480px;">
                         <thead>
                             <tr>
-                                <th>Product</th>
-                                <th>SKU</th>
-                                <th>Qty</th>
-                                <th>Price</th>
-                                <th>Subtotal</th>
-                                <th>Action</th>
+                                <th style="padding: 10px 8px !important;">Product</th>
+                                <th style="padding: 10px 8px !important;">SKU</th>
+                                <th style="padding: 10px 8px !important;">Qty</th>
+                                <th style="padding: 10px 8px !important;">Price</th>
+                                <th style="padding: 10px 8px !important;">Subtotal</th>
+                                <th style="padding: 10px 8px !important;">Action</th>
                             </tr>
                         </thead>
                         <tbody></tbody>
@@ -265,8 +263,10 @@
                 </div>
 
                 <!-- Submit Button -->
-                <button type="submit" class="btn btn-success w-100" id="generateBillBtn" disabled>
-                    <i class="bi bi-file-earmark-pdf me-2"></i>Complete Sale & Generate Bill
+                <button type="submit" class="btn w-100" id="generateBillBtn" disabled
+                    style="background:#1a3f6f;color:#fff;font-weight:600;border:none;min-height:46px;border-radius:10px;box-shadow:0 4px 14px rgba(26,63,111,0.3);transition:background 0.18s;"
+                    onmouseover="this.style.background='#142f54'" onmouseout="this.style.background='#1a3f6f'">
+                    <i class="bi bi-file-earmark-pdf me-2"></i>Complete Sale &amp; Generate Bill
                 </button>
             </form>
         </div>
@@ -638,13 +638,13 @@
             
             const row = document.createElement('tr');
             row.innerHTML = 
-                '<td><div class="fw-semibold text-white">' + item.name + '</div></td>' +
-                '<td><span class="text-muted fs-7">' + item.sku + '</span></td>' +
-                '<td class="text-white">' + item.quantity + '</td>' +
-                '<td>INR ' + item.price.toFixed(2) + '</td>' +
-                '<td class="fw-bold text-white">INR ' + subtotal.toFixed(2) + '</td>' +
-                '<td>' +
-                    '<button type="button" class="btn btn-sm btn-outline-danger py-1" onclick="removeItem(' + idx + ')">' +
+                '<td style="padding: 10px 8px !important;"><div class="fw-semibold text-white">' + item.name + '</div></td>' +
+                '<td style="padding: 10px 8px !important;"><span class="text-muted fs-7">' + item.sku + '</span></td>' +
+                '<td style="padding: 10px 8px !important;" class="text-white">' + item.quantity + '</td>' +
+                '<td style="padding: 10px 8px !important;">INR ' + item.price.toFixed(2) + '</td>' +
+                '<td style="padding: 10px 8px !important;" class="fw-bold text-white">INR ' + subtotal.toFixed(2) + '</td>' +
+                '<td style="padding: 10px 8px !important;">' +
+                    '<button type="button" class="btn btn-sm btn-outline-danger py-1 px-2" onclick="removeItem(' + idx + ')">' +
                         '<i class="bi bi-trash"></i>' +
                     '</button>' +
                 '</td>';

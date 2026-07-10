@@ -142,7 +142,7 @@
                                     <i class="bi bi-pencil-fill"></i>
                                 </button>
                                 
-                                <% if ("ADMIN".equals(userRole)) { %>
+                                <% if ("ADMIN".equals(userRole) || "DEMO".equals(userRole)) { %>
                                     <a href="<%= request.getContextPath() %>/products/delete?id=<%= p.getId() %>" 
                                        class="btn btn-sm btn-outline-danger py-1 px-2"
                                        onclick="return confirm('Are you sure you want to delete this product?');"

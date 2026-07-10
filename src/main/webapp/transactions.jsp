@@ -234,16 +234,6 @@
                     <input type="hidden" name="productId" id="productId" required>
                 </div>
 
-            <div class="mb-3">
-                <select class="form-select" id="productSelect" aria-label="Choose product">
-                    <option value="">-- Choose Product --</option>
-                    <% if (products != null) {
-                        for (Product p : products) {
-                    %>
-                        <option value="<%= p.getId() %>"><%= p.getName() %> (<%= p.getSku() %>)</option>
-                    <% } } %>
-                </select>
-            </div>
 
                 <div class="mb-3 selected-product-meta" id="product-meta-info" style="min-height: 24px;">
                     <!-- Selected product info will be displayed here -->
@@ -260,7 +250,7 @@
                     <textarea class="form-control" id="notes" name="notes" rows="4" placeholder="e.g. Supplier invoice ref: 8976, from Fresh Farms Co." required></textarea>
                 </div>
                 
-                <button type="submit" class="btn btn-primary w-100">
+                <button type="submit" class="btn w-100" style="background:#1a3f6f; color:#fff; font-weight:600; border:none; min-height:46px; border-radius:10px; box-shadow:0 4px 14px rgba(26,63,111,0.3); transition:background 0.18s;" onmouseover="this.style.background='#142f54'" onmouseout="this.style.background='#1a3f6f'">
                     <i class="bi bi-arrow-down-left-circle me-2"></i>Process Stock In
                 </button>
             </form>
@@ -357,7 +347,6 @@
         const quantityInput    = document.getElementById("quantity");
         const qtyHelper        = document.getElementById("qtyHelper");
         const productSearch    = document.getElementById("productSearch");
-        const productSelect    = document.getElementById("productSelect");
         const autocompleteList = document.getElementById("autocomplete-list");
         const productMetaInfo  = document.getElementById("product-meta-info");
         const productIdInput   = document.getElementById("productId");
@@ -421,7 +410,6 @@
             selectedProduct      = product;
             productSearch.value  = product.name;
             productIdInput.value = product.id;
-            productSelect.value  = String(product.id);
             hideDropdown();
             updateMetaAndValidation();
             quantityInput.focus();
@@ -480,18 +468,6 @@
             quantityInput.removeAttribute("max");
             qtyHelper.innerHTML = "<span class='text-success'>Adds directly to current capacity.</span>";
         }
-
-        productSelect.addEventListener("change", function() {
-            const product = products.find(p => String(p.id) === this.value);
-            if (product) {
-                selectProduct(product);
-            } else {
-                selectedProduct = null;
-                productSearch.value = "";
-                productIdInput.value = "";
-                productMetaInfo.innerHTML = "";
-            }
-        });
 
         // Form submission safety check
         movementForm.addEventListener("submit", function(e) {

@@ -30,7 +30,6 @@
 <jsp:include page="includes/header.jsp" />
 <jsp:include page="includes/sidebar.jsp" />
 
-<!-- Page Header -->
 <div class="page-header">
     <div>
         <h1 class="page-title">Welcome Back, <%= session.getAttribute("fullname") %></h1>
@@ -43,7 +42,6 @@
     </div>
 </div>
 
-<!-- Stat Cards -->
 <div class="row g-4 mb-5">
     <div class="col-sm-6 col-xl-3">
         <a href="<%= request.getContextPath() %>/products" class="text-decoration-none">
@@ -55,7 +53,7 @@
         </a>
     </div>
     <div class="col-sm-6 col-xl-3">
-        <a href="<%= request.getContextPath() %>/alerts" class="text-decoration-none">
+        <a href="<%= request.getContextPath() %>/alerts?filter=LOW_STOCK" class="text-decoration-none">
             <div class="stat-card" style="cursor:pointer;">
                 <div class="stat-icon icon-amber"><i class="bi bi-exclamation-triangle"></i></div>
                 <div class="stat-value" style="color:#d97706"><%= lowStock %></div>
@@ -64,7 +62,7 @@
         </a>
     </div>
     <div class="col-sm-6 col-xl-3">
-        <a href="<%= request.getContextPath() %>/alerts" class="text-decoration-none">
+        <a href="<%= request.getContextPath() %>/alerts?filter=NEAR_EXPIRY" class="text-decoration-none">
             <div class="stat-card" style="cursor:pointer;">
                 <div class="stat-icon icon-blue"><i class="bi bi-calendar-event"></i></div>
                 <div class="stat-value" style="color:#2563eb"><%= nearExpiry %></div>
@@ -73,7 +71,7 @@
         </a>
     </div>
     <div class="col-sm-6 col-xl-3">
-        <a href="<%= request.getContextPath() %>/alerts" class="text-decoration-none">
+        <a href="<%= request.getContextPath() %>/alerts?filter=EXPIRED" class="text-decoration-none">
             <div class="stat-card" style="cursor:pointer;">
                 <div class="stat-icon icon-red"><i class="bi bi-x-circle"></i></div>
                 <div class="stat-value" style="color:#dc2626"><%= expiredCount %></div>
@@ -83,17 +81,15 @@
     </div>
 </div>
 
-<!-- Charts + Recent Logs -->
 <div class="row g-4 mb-4">
-    <!-- Doughnut Chart -->
     <div class="col-lg-5">
         <div class="glass-panel h-100 p-4">
             <h5 class="mb-4 d-flex align-items-center gap-2" style="color:var(--navy);">
                 <i class="bi bi-pie-chart-fill" style="color:var(--blue);"></i> Category Distribution
             </h5>
-            <div class="d-flex align-items-center justify-content-center" style="position:relative;height:260px;">
+            <div style="position:relative; height:280px;">
                 <% if (categoryDistribution.isEmpty()) { %>
-                    <div class="text-muted fs-6">No products available yet.</div>
+                    <div class="text-muted fs-6 d-flex align-items-center justify-content-center h-100">No products available yet.</div>
                 <% } else { %>
                     <canvas id="categoryChart"></canvas>
                 <% } %>
@@ -101,16 +97,13 @@
         </div>
     </div>
 
-    <!-- Recent Transactions -->
     <div class="col-lg-7">
         <div class="glass-panel h-100 p-4">
             <h5 class="mb-4 d-flex align-items-center justify-content-between" style="color:var(--navy);">
                 <span class="d-flex align-items-center gap-2">
                     <i class="bi bi-clock-history" style="color:var(--blue);"></i> Recent Stock Move Logs
                 </span>
-                <a href="<%= request.getContextPath() %>/transactions"
-                   class="text-decoration-none fw-600"
-                   style="font-size:.85rem;color:var(--blue);">View All</a>
+                <a href="<%= request.getContextPath() %>/transactions" class="text-decoration-none fw-600" style="font-size:.85rem;color:var(--blue);">View All</a>
             </h5>
             <div class="table-responsive">
                 <table class="table glass-table align-middle">
@@ -124,9 +117,7 @@
                     </thead>
                     <tbody>
                         <% if (recentTransactions.isEmpty()) { %>
-                            <tr>
-                                <td colspan="4" class="text-center py-4 text-muted">No stock actions recorded yet.</td>
-                            </tr>
+                            <tr><td colspan="4" class="text-center py-4 text-muted">No stock actions recorded yet.</td></tr>
                         <% } else {
                             for (Transaction t : recentTransactions) {
                                 String typeBadge = "STOCK_IN".equals(t.getType())
@@ -157,36 +148,61 @@
 <script>
 document.addEventListener("DOMContentLoaded", function() {
     <% if (!categoryDistribution.isEmpty()) { %>
-    const ctx = document.getElementById('categoryChart').getContext('2d');
+    const ctx = document.getElementById("categoryChart").getContext("2d");
+    const palette = [
+        "#6366f1","#f59e0b","#10b981","#ef4444","#3b82f6",
+        "#ec4899","#14b8a6","#f97316","#8b5cf6","#84cc16",
+        "#06b6d4","#e11d48","#a855f7","#22c55e","#eab308"
+    ];
+    const labels = <%= chartLabelsJson %>;
+    const data   = <%= chartDataJson %>;
+    const total  = data.reduce((a, b) => a + b, 0);
+    const colors = labels.map((_, i) => palette[i % palette.length]);
     new Chart(ctx, {
-        type: 'doughnut',
+        type: "doughnut",
         data: {
-            labels: <%= chartLabelsJson %>,
+            labels: labels,
             datasets: [{
-                data: <%= chartDataJson %>,
-                backgroundColor: [
-                    '#1a3f6f','#2563eb','#3b82f6','#60a5fa','#93c5fd','#bfdbfe'
-                ],
-                borderColor: '#ffffff',
+                data: data,
+                backgroundColor: colors,
+                borderColor: "#ffffff",
                 borderWidth: 3,
-                hoverOffset: 10
+                hoverOffset: 14,
+                hoverBorderWidth: 2
             }]
         },
         options: {
             responsive: true,
             maintainAspectRatio: false,
+            cutout: "62%",
+            animation: { animateRotate: true, duration: 900 },
             plugins: {
                 legend: {
-                    position: 'bottom',
+                    position: "bottom",
                     labels: {
-                        color: '#6b7280',
-                        font: { family: 'Inter', size: 12 },
-                        padding: 16,
-                        usePointStyle: true
+                        color: "#374151",
+                        font: { family: "Inter", size: 11.5 },
+                        padding: 14,
+                        usePointStyle: true,
+                        pointStyleWidth: 10,
+                        boxHeight: 10
                     }
+                },
+                tooltip: {
+                    callbacks: {
+                        label: function(context) {
+                            const val = context.parsed;
+                            const pct = ((val / total) * 100).toFixed(1);
+                            return "  " + context.label + ": " + val + " products (" + pct + "%)";
+                        }
+                    },
+                    backgroundColor: "rgba(17,24,39,0.92)",
+                    titleFont: { family: "Inter", size: 13 },
+                    bodyFont:  { family: "Inter", size: 12 },
+                    padding: 12,
+                    cornerRadius: 10
                 }
-            },
-            cutout: '68%'
+            }
         }
     });
     <% } %>
