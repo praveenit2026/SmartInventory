@@ -21,9 +21,9 @@ public class ConnectionProvider {
             }
             if (in != null) {
                 props.load(in);
-                url = props.getProperty("db.url");
-                username = props.getProperty("db.username");
-                password = props.getProperty("db.password");
+                url = System.getenv("DB_URL") != null ? System.getenv("DB_URL") : props.getProperty("db.url");
+                username = System.getenv("DB_USERNAME") != null ? System.getenv("DB_USERNAME") : props.getProperty("db.username");
+                password = System.getenv("DB_PASSWORD") != null ? System.getenv("DB_PASSWORD") : props.getProperty("db.password");
                 driver = props.getProperty("db.driver");
                 Class.forName(driver);
             } else {
