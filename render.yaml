@@ -1,0 +1,17 @@
+services:
+  - type: web
+    name: smart-inventory
+    runtime: docker
+    dockerfilePath: ./Dockerfile
+    # Render free tier: 512 MB RAM, shared CPU
+    plan: free
+    # Health check — Tomcat ROOT context
+    healthCheckPath: /login.jsp
+    envVars:
+      # ── Database (set these in Render Dashboard → Environment) ──
+      - key: DB_URL
+        sync: false        # mark as secret — set manually in dashboard
+      - key: DB_USERNAME
+        sync: false
+      - key: DB_PASSWORD
+        sync: false

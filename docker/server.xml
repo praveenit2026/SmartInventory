@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  Tomcat server.xml — Render-compatible
+  PORT is replaced at container startup by the Dockerfile CMD.
+  Uses 8080 as placeholder (replaced by sed at runtime).
+-->
+<Server port="-1" shutdown="SHUTDOWN">
+
+  <Listener className="org.apache.catalina.startup.VersionLoggerListener" />
+  <Listener className="org.apache.catalina.core.AprLifecycleListener" SSLEngine="on" />
+  <Listener className="org.apache.catalina.core.JreMemoryLeakPreventionListener" />
+  <Listener className="org.apache.catalina.mbeans.GlobalResourcesLifecycleListener" />
+  <Listener className="org.apache.catalina.core.ThreadLocalLeakPreventionListener" />
+
+  <Service name="Catalina">
+
+    <!-- Render assigns PORT via env var; sed replaces 8080 at startup -->
+    <Connector port="8080" protocol="HTTP/1.1"
+               connectionTimeout="20000"
+               redirectPort="8443"
+               maxThreads="150"
+               minSpareThreads="10"
+               acceptCount="100"
+               compression="on"
+               compressionMinSize="2048"
+               noCompressionUserAgents="gozilla, traviata"
+               compressableMimeType="text/html,text/xml,text/css,application/javascript,application/json" />
+
+    <Engine name="Catalina" defaultHost="localhost">
+
+      <Host name="localhost" appBase="webapps"
+            unpackWARs="true" autoDeploy="true">
+
+        <Valve className="org.apache.catalina.valves.AccessLogValve"
+               directory="logs" prefix="localhost_access_log"
+               suffix=".txt"
+               pattern="%h %l %u %t &quot;%r&quot; %s %b" />
+
+      </Host>
+    </Engine>
+  </Service>
+</Server>
