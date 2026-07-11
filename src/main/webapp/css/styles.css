@@ -612,3 +612,114 @@ a { text-decoration: none; color: inherit; }
     -webkit-background-clip: unset;
     -webkit-text-fill-color: unset;
 }
+
+/* ── Mobile & Responsive Rules ──────────────────────────────── */
+.mobile-navbar {
+    display: none; /* Hidden on desktop */
+}
+
+.sidebar-backdrop {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    background: rgba(15, 23, 42, 0.4);
+    backdrop-filter: blur(4px);
+    -webkit-backdrop-filter: blur(4px);
+    z-index: 998; /* Below sidebar, above content */
+    transition: opacity 0.3s ease;
+}
+
+@media (max-width: 991.98px) {
+    .mobile-navbar {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        position: fixed;
+        top: 0;
+        left: 0;
+        right: 0;
+        height: 60px;
+        background: rgba(255, 255, 255, 0.85) !important;
+        backdrop-filter: blur(12px);
+        -webkit-backdrop-filter: blur(12px);
+        border-bottom: 1px solid var(--border);
+        padding: 0 20px;
+        z-index: 999;
+        box-shadow: var(--shadow-sm);
+        border-radius: 0; /* Override glass-panel default border radius */
+    }
+
+    .mobile-brand {
+        font-family: 'Outfit', sans-serif;
+        font-size: 1.15rem;
+        font-weight: 800;
+        color: var(--navy);
+        letter-spacing: -.03em;
+        display: flex;
+        align-items: center;
+        gap: 8px;
+    }
+    
+    .mobile-brand i {
+        color: var(--blue);
+        font-size: 1.25rem;
+    }
+
+    .app-sidebar {
+        transform: translateX(-100%);
+        transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        z-index: 1000;
+        width: var(--sidebar-width);
+        box-shadow: var(--shadow-lg);
+    }
+
+    .app-sidebar.show {
+        transform: translateX(0);
+    }
+
+    .app-content {
+        margin-left: 0 !important;
+        padding: 80px 16px 40px !important; /* Space for fixed mobile-navbar */
+    }
+    
+    /* Layout alignments on mobile */
+    .page-header {
+        flex-direction: column;
+        gap: 16px;
+        margin-bottom: 24px;
+        align-items: stretch;
+    }
+    
+    .page-header .btn {
+        width: 100%;
+        justify-content: center;
+    }
+
+    /* Cards alignment */
+    .stat-card {
+        padding: 20px;
+    }
+}
+
+@media (max-width: 575.98px) {
+    /* Stack form elements in billing page */
+    .d-flex.gap-2.align-items-stretch {
+        flex-wrap: wrap;
+    }
+    
+    #productSearch {
+        width: 100% !important;
+    }
+    
+    #quantity {
+        width: calc(50% - 4px) !important;
+    }
+    
+    #addToCartBtn {
+        width: calc(50% - 4px) !important;
+        justify-content: center;
+    }
+}

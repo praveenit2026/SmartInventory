@@ -11,7 +11,7 @@
     String userRole     = (String) session.getAttribute("role");
     String userFullname = (String) session.getAttribute("fullname");
 %>
-<aside class="app-sidebar">
+<aside class="app-sidebar" id="mobileSidebar">
     <div class="sidebar-brand">
         <i class="bi bi-shield-check me-2"></i>Smart Inventory
     </div>

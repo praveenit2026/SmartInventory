@@ -1,4 +1,6 @@
     </main> <!-- End app-content -->
+    <!-- Sidebar Backdrop for Mobile -->
+    <div class="sidebar-backdrop" id="sidebarBackdrop"></div>
 </div> <!-- End app-container -->
 
 <!-- Bootstrap 5 Bundle with Popper -->
@@ -6,6 +8,9 @@
 
 <!-- jQuery for AJAX and utility scripts -->
 <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
+
+<!-- Mobile Navigation Script -->
+<script src="<%= request.getContextPath() %>/js/mobile-nav.js"></script>
 
 <!-- Live Notification Poller (Dynamic micro-animations and status checks) -->
 <script>

@@ -31,3 +31,4 @@
 </head>
 <body>
     <div class="app-container">
+        <jsp:include page="mobile-navbar.jsp" />
