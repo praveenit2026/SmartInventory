@@ -1,12 +1,22 @@
-# Smart Inventory Control System 📦🛡️
+# Smart Retail Grocery & Perishable Food Inventory Management System 📦🍎🥛
 
-A modern, fast, and feature-rich Java-based enterprise Web Application for real-time inventory management, stock tracking, and product expiry alert forecasting.
+A modern, fast, and feature-rich Java-based enterprise Web Application designed specifically for the **FMCG, Retail Grocery, and Perishable Food Logistics** industry. 
 
-Built using Java EE (Servlets & JSP), Bootstrap 5 for clean UX/UI, and MySQL. It runs on any Java Web container (Tomcat / Jetty / Docker).
+Built using Java EE (Servlets & JSP), Bootstrap 5 for clean UX/UI, and MySQL, the application features an embedded HikariCP connection pool for low-latency queries and runs on any Java Web container (Tomcat / Jetty / Docker).
 
 ---
 
-## Key Features 🚀
+## 🏬 Industry-Specific Features
+
+Unlike general-purpose stock managers, this system is optimized for **grocery retail and perishable foods management**:
+- **Perishable Lifecycle Management**: Tracks items with explicit `expiry_date` attributes.
+- **Multi-Category Food Catalog**: Pre-categorized for *Fresh Produce, Dairy & Eggs, Meat & Seafood, Bakery & Bread, Beverages, Snacks & Confectionery, Frozen Foods, Grains & Pulses*.
+- **Automated Expiry Forecasting**: Calculates shelf-life margins and flags products nearing expiry or already expired.
+- **Stock Threshold Safety Bounds**: Restricts stock-out (sales) operations if they exceed current physical capacity or database levels.
+
+---
+
+## 🚀 Key Features
 
 - **Interactive Analytics Dashboard**: Real-time category distribution charts, KPIs (total items, low stock, expired, near-expiry), and recent audit trails.
 - **Product Catalog Management**: Dynamic searching, category filters, supplier assignments, and minimum threshold configurations.
@@ -17,7 +27,7 @@ Built using Java EE (Servlets & JSP), Bootstrap 5 for clean UX/UI, and MySQL. It
 
 ---
 
-## Tech Stack 🛠️
+## 🛠️ Tech Stack
 
 - **Core Engine**: Java 8+ / Java Servlet API & JSP
 - **Database**: MySQL 8.0+
@@ -29,7 +39,27 @@ Built using Java EE (Servlets & JSP), Bootstrap 5 for clean UX/UI, and MySQL. It
 
 ---
 
-## Database Schema & Architecture 🗄️
+## 🎯 Demo Mode Walkthrough
+
+To try the application instantly without manual registration:
+
+1. **One-Click Demo Sign In**:
+   * Navigate to the login page and click the primary **Demo** button.
+   * This automatically authenticates you as a demo user and logs you into the dashboard populated with default grocery suppliers (like *FreshFarms Co*, *Apex Dairy Ltd*) and a catalog of 35+ grocery items.
+
+2. **Automated Alerting Simulation**:
+   * The application starts a background task (`AlertScheduler`) that runs on startup and rescans the inventory.
+   * Check your application logs/console to view simulated JavaMail and SMS gateway triggers for items like *Butter Croissants (4pk)* (Expired) or *Whole Milk (1L)* (Low Stock).
+
+3. **Billing Desk / Cart System**:
+   * Go to the **Stock Sales** tab.
+   * Search for products (e.g., "Whole Milk" or "Organic Apples") using the autocomplete search bar.
+   * Adjust quantities and click **Add to Cart**.
+   * Click **Complete Sale & Generate Bill** to process the stock-out and instantly view the generated PDF invoice.
+
+---
+
+## 🗄️ Database Schema
 
 The database is built on 5 relational tables:
 1. `users` (Authentication & roles: `ADMIN`, `MANAGER`, `DEMO`)
@@ -40,7 +70,7 @@ The database is built on 5 relational tables:
 
 ---
 
-## Local Setup & Quickstart 💻
+## 💻 Local Setup & Quickstart
 
 ### Prerequisites
 - **JDK 1.8** or newer installed.
@@ -69,7 +99,7 @@ Once started, open [http://localhost:8081/smart_inventory/](http://localhost:808
 
 ---
 
-## Production Deployment (Render / Docker) ☁️
+## ☁️ Production Deployment (Render / Docker)
 
 The app includes a [Dockerfile](file:///Dockerfile) and [render.yaml](file:///render.yaml) configuration for instant deployment to Render.
 
@@ -81,7 +111,7 @@ Configure the following variables in your Render web service panel:
 
 ---
 
-## Default Access Credentials 🔑
+## 🔑 Default Access Credentials
 
 | Role | Username | Password |
 | :--- | :--- | :--- |
