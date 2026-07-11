@@ -34,6 +34,8 @@ public class AlertScheduler implements ServletContextListener {
         if (scheduler != null) {
             scheduler.shutdown();
         }
+        System.out.println("[AlertScheduler] Closing HikariCP database connection pool...");
+        com.smartinventory.util.ConnectionProvider.shutdown();
     }
 
     private void checkInventoryAlerts() {

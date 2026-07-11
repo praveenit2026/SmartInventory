@@ -50,6 +50,25 @@
             <version>8.0.28</version>
         </dependency>
 
+        <!-- HikariCP Connection Pool -->
+        <dependency>
+            <groupId>com.zaxxer</groupId>
+            <artifactId>HikariCP</artifactId>
+            <version>4.0.3</version>
+        </dependency>
+
+        <!-- SLF4J API and Simple binding for HikariCP logging -->
+        <dependency>
+            <groupId>org.slf4j</groupId>
+            <artifactId>slf4j-api</artifactId>
+            <version>1.7.36</version>
+        </dependency>
+        <dependency>
+            <groupId>org.slf4j</groupId>
+            <artifactId>slf4j-simple</artifactId>
+            <version>1.7.36</version>
+        </dependency>
+
         <!-- JavaMail API -->
         <dependency>
             <groupId>com.sun.mail</groupId>
