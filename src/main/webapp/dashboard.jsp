@@ -12,15 +12,13 @@
     ProductDAO productDAO = new ProductDAO();
     TransactionDAO transactionDAO = new TransactionDAO();
 
-    int totalProducts  = productDAO.getTotalProductCount();
-    int lowStock       = productDAO.getLowStockCount();
-    int expiredCount   = productDAO.getExpiredCount();
-    int nearExpiry     = productDAO.getNearExpiryCount();
+    Map<String, Integer> metrics = productDAO.getDashboardMetrics();
+    int totalProducts  = metrics.getOrDefault("total_products", 0);
+    int lowStock       = metrics.getOrDefault("low_stock", 0);
+    int expiredCount   = metrics.getOrDefault("expired", 0);
+    int nearExpiry     = metrics.getOrDefault("near_expiry", 0);
 
-    List<Transaction> recentTransactions = transactionDAO.getAllTransactions();
-    if (recentTransactions.size() > 5) {
-        recentTransactions = recentTransactions.subList(0, 5);
-    }
+    List<Transaction> recentTransactions = transactionDAO.getRecentTransactions(5);
 
     Map<String, Integer> categoryDistribution = productDAO.getCategoryDistribution();
     Gson gson = new Gson();

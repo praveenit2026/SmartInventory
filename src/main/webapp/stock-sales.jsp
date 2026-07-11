@@ -20,7 +20,7 @@
         products = new ProductDAO().getAllProducts();
     }
     if (transactions == null) {
-        transactions = new TransactionDAO().getAllTransactions();
+        transactions = new TransactionDAO().getRecentTransactions(50);
     }
 %>
 <jsp:include page="includes/header.jsp" />

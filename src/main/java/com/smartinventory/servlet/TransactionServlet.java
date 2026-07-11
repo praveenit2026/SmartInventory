@@ -91,7 +91,7 @@ public class TransactionServlet extends HttpServlet {
 
     private void listTransactions(HttpServletRequest request, HttpServletResponse response) 
             throws ServletException, IOException {
-        List<Transaction> transactions = transactionDAO.getAllTransactions();
+        List<Transaction> transactions = transactionDAO.getRecentTransactions(100);
         List<Product> products = productDAO.getAllProducts();
         
         request.setAttribute("transactions", transactions);

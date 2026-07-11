@@ -154,6 +154,28 @@ public class ProductDAO {
 
     // --- Metric Queries for Dashboard Analytics ---
 
+    public Map<String, Integer> getDashboardMetrics() {
+        Map<String, Integer> metrics = new HashMap<>();
+        String query = "SELECT " +
+                       "(SELECT COUNT(*) FROM products) as total_products, " +
+                       "(SELECT COUNT(*) FROM products WHERE stock_quantity <= min_stock_level) as low_stock, " +
+                       "(SELECT COUNT(*) FROM products WHERE expiry_date IS NOT NULL AND expiry_date < CURDATE()) as expired, " +
+                       "(SELECT COUNT(*) FROM products WHERE expiry_date IS NOT NULL AND expiry_date >= CURDATE() AND expiry_date <= DATE_ADD(CURDATE(), INTERVAL 30 DAY)) as near_expiry";
+        try (Connection con = ConnectionProvider.getConnection();
+             PreparedStatement ps = con.prepareStatement(query);
+             ResultSet rs = ps.executeQuery()) {
+            if (rs.next()) {
+                metrics.put("total_products", rs.getInt("total_products"));
+                metrics.put("low_stock", rs.getInt("low_stock"));
+                metrics.put("expired", rs.getInt("expired"));
+                metrics.put("near_expiry", rs.getInt("near_expiry"));
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return metrics;
+    }
+
     public int getTotalProductCount() {
         int count = 0;
         String query = "SELECT COUNT(*) FROM products";

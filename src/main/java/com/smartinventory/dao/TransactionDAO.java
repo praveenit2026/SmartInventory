@@ -41,6 +41,37 @@ public class TransactionDAO {
         return list;
     }
 
+    public List<Transaction> getRecentTransactions(int limit) {
+        List<Transaction> list = new ArrayList<>();
+        String query = "SELECT t.*, p.name as product_name, p.sku as product_sku, u.fullname as user_fullname FROM transactions t " +
+                       "JOIN products p ON t.product_id = p.id " +
+                       "JOIN users u ON t.user_id = u.id " +
+                       "ORDER BY t.transaction_date DESC LIMIT ?";
+        try (Connection con = ConnectionProvider.getConnection();
+             PreparedStatement ps = con.prepareStatement(query)) {
+            ps.setInt(1, limit);
+            try (ResultSet rs = ps.executeQuery()) {
+                while (rs.next()) {
+                    Transaction t = new Transaction();
+                    t.setId(rs.getInt("id"));
+                    t.setProductId(rs.getInt("product_id"));
+                    t.setUserId(rs.getInt("user_id"));
+                    t.setType(rs.getString("type"));
+                    t.setQuantity(rs.getInt("quantity"));
+                    t.setTransactionDate(rs.getTimestamp("transaction_date"));
+                    t.setNotes(rs.getString("notes"));
+                    t.setProductName(rs.getString("product_name"));
+                    t.setSku(rs.getString("product_sku"));
+                    t.setUserFullname(rs.getString("user_fullname"));
+                    list.add(t);
+                }
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return list;
+    }
+
     public boolean addTransaction(Transaction t) {
         String insertQuery = "INSERT INTO transactions (product_id, user_id, type, quantity, notes) VALUES (?, ?, ?, ?, ?)";
         String updateProductQuery = "UPDATE products SET stock_quantity = stock_quantity + ? WHERE id = ?";

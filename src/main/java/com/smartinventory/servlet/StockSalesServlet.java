@@ -122,7 +122,7 @@ public class StockSalesServlet extends HttpServlet {
     private void listSales(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         request.setAttribute("products", productDAO.getAllProducts());
-        request.setAttribute("transactions", transactionDAO.getAllTransactions());
+        request.setAttribute("transactions", transactionDAO.getRecentTransactions(50));
         request.getRequestDispatcher("/stock-sales.jsp").forward(request, response);
     }
 

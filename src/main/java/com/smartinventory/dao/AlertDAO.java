@@ -38,6 +38,21 @@ public class AlertDAO {
         return list;
     }
 
+    public int getUnreadAlertsCount() {
+        int count = 0;
+        String query = "SELECT COUNT(*) FROM alerts WHERE is_read = FALSE";
+        try (Connection con = ConnectionProvider.getConnection();
+             PreparedStatement ps = con.prepareStatement(query);
+             ResultSet rs = ps.executeQuery()) {
+            if (rs.next()) {
+                count = rs.getInt(1);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return count;
+    }
+
     public List<Alert> getUnreadAlerts() {
         List<Alert> list = new ArrayList<>();
         String query = "SELECT a.*, p.name as product_name, p.sku as product_sku FROM alerts a " +

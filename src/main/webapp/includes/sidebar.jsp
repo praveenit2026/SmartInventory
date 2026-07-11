@@ -6,7 +6,7 @@
     if (activePage == null) activePage = "dashboard";
 
     AlertDAO sidebarAlertDAO = new AlertDAO();
-    int unreadAlertsCount = sidebarAlertDAO.getUnreadAlerts().size();
+    int unreadAlertsCount = sidebarAlertDAO.getUnreadAlertsCount();
 
     String userRole     = (String) session.getAttribute("role");
     String userFullname = (String) session.getAttribute("fullname");
