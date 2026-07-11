@@ -86,6 +86,8 @@ a { text-decoration: none; color: inherit; }
 .app-container {
     display: flex;
     min-height: 100vh;
+    width: 100%;
+    overflow-x: hidden;
 }
 
 /* ── Sidebar ──────────────────────────────────────────────── */
@@ -195,6 +197,7 @@ a { text-decoration: none; color: inherit; }
 /* ── Main Content ─────────────────────────────────────────── */
 .app-content {
     flex: 1;
+    min-width: 0;
     margin-left: var(--sidebar-width);
     min-height: 100vh;
     padding: 40px 48px;
@@ -372,10 +375,11 @@ a { text-decoration: none; color: inherit; }
 /* ── Tables ───────────────────────────────────────────────── */
 .table-responsive {
     border-radius: var(--radius-lg);
-    overflow: hidden;
+    overflow-x: auto;
     border: 1px solid var(--border);
     background: var(--bg-white);
     box-shadow: var(--shadow-xs);
+    -webkit-overflow-scrolling: touch;
 }
 
 .glass-table {
