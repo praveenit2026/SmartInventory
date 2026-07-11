@@ -1,6 +1,6 @@
 # Smart Retail Grocery & Perishable Food Inventory Management System 📦🍎🥛
 
-A modern, fast, and feature-rich Java-based enterprise Web Application designed specifically for the **FMCG, Retail Grocery, and Perishable Food Logistics** industry. 
+A modern, fast, and feature-rich Java-based enterprise Web Application designed specifically for the **FMCG, Retail Grocery, and Perishable Food Logistics** industry. Featuring a **fully responsive layout**, it adapts seamlessly across desktop, laptop, tablet, and mobile phone screens.
 
 Built using Java EE (Servlets & JSP), Bootstrap 5 for clean UX/UI, and MySQL, the application features an embedded HikariCP connection pool for low-latency queries and runs on any Java Web container (Tomcat / Jetty / Docker).
 
@@ -18,6 +18,7 @@ Unlike general-purpose stock managers, this system is optimized for **grocery re
 
 ## 🚀 Key Features
 
+- **Responsive Mobile-First UI**: Seamless user experience optimized for both large screens (laptops, monitors) and touch-first devices (mobile phones, tablets) using collapsible sidebars and fluid grids.
 - **Interactive Analytics Dashboard**: Real-time category distribution charts, KPIs (total items, low stock, expired, near-expiry), and recent audit trails.
 - **Product Catalog Management**: Dynamic searching, category filters, supplier assignments, and minimum threshold configurations.
 - **Optimized Stock Moves (In/Out)**: Full transaction logging with automatic inventory level updates, safety check bounds, and auto-complete product searches.
