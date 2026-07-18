@@ -21,6 +21,10 @@ public class SessionFilter implements Filter {
                 if (role != null) {
                     UserContext.setRole(role);
                 }
+                Boolean useDemo = (Boolean) session.getAttribute("useDemoData");
+                if (useDemo != null) {
+                    UserContext.setUseDemoData(useDemo);
+                }
             }
         }
         try {

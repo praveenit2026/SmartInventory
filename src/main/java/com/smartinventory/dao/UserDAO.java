@@ -29,22 +29,23 @@ public class UserDAO {
 
         User user = null;
         String query = "SELECT * FROM users WHERE username = ? AND password = ?";
-        try (Connection con = ConnectionProvider.getConnection();
-             PreparedStatement ps = con.prepareStatement(query)) {
-            
-            ps.setString(1, username);
-            ps.setString(2, password);
-            
-            try (ResultSet rs = ps.executeQuery()) {
-                if (rs.next()) {
-                    user = new User();
-                    user.setId(rs.getInt("id"));
-                    user.setUsername(rs.getString("username"));
-                    user.setPassword(rs.getString("password"));
-                    user.setFullname(rs.getString("fullname"));
-                    user.setRole(rs.getString("role"));
-                    user.setEmail(rs.getString("email"));
-                    user.setCreatedAt(rs.getTimestamp("created_at"));
+        try {
+            Connection con = ConnectionProvider.getConnection();
+            if (con == null) return null; // DB offline — let AuthServlet use offline fallback
+            try (Connection c = con; PreparedStatement ps = c.prepareStatement(query)) {
+                ps.setString(1, username);
+                ps.setString(2, password);
+                try (ResultSet rs = ps.executeQuery()) {
+                    if (rs.next()) {
+                        user = new User();
+                        user.setId(rs.getInt("id"));
+                        user.setUsername(rs.getString("username"));
+                        user.setPassword(rs.getString("password"));
+                        user.setFullname(rs.getString("fullname"));
+                        user.setRole(rs.getString("role"));
+                        user.setEmail(rs.getString("email"));
+                        user.setCreatedAt(rs.getTimestamp("created_at"));
+                    }
                 }
             }
         } catch (Exception e) {

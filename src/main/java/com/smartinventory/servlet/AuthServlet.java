@@ -73,6 +73,7 @@ public class AuthServlet extends HttpServlet {
                 }
             }
 
+            boolean isOfflineLogin = false;
             // 2. If DB is offline or returned null, fall back to built-in offline credentials
             if (user == null) {
                 String[] offlineEntry = OFFLINE_USERS.get(username);
@@ -84,6 +85,7 @@ public class AuthServlet extends HttpServlet {
                     user.setFullname(offlineEntry[1]);
                     user.setRole(offlineEntry[2]);
                     user.setEmail(offlineEntry[3]);
+                    isOfflineLogin = true;
                     System.out.println("[AuthServlet] Logged in via offline fallback: " + username + " (" + offlineEntry[2] + ")");
                 }
             }
@@ -95,6 +97,11 @@ public class AuthServlet extends HttpServlet {
                 session.setAttribute("username", user.getUsername());
                 session.setAttribute("fullname", user.getFullname());
                 session.setAttribute("role", user.getRole());
+                if (isOfflineLogin || "DEMO".equals(user.getRole())) {
+                    session.setAttribute("useDemoData", true);
+                } else {
+                    session.setAttribute("useDemoData", false);
+                }
                 
                 response.sendRedirect(request.getContextPath() + "/dashboard.jsp");
             } else {
