@@ -37,11 +37,8 @@ public class ConnectionProvider {
                 config.setMaxLifetime(1800000); // 30 minutes
                 config.setConnectionTimeout(10000); // 10 seconds
 
-                // MySQL driver optimizations
-                config.addDataSourceProperty("cachePrepStmts", "true");
-                config.addDataSourceProperty("prepStmtCacheSize", "250");
-                config.addDataSourceProperty("prepStmtCacheSqlLimit", "2048");
-                config.addDataSourceProperty("useServerPrepStmts", "true");
+                // PostgreSQL connection optimizations
+                config.addDataSourceProperty("reWriteBatchedInserts", "true");
 
                 dataSource = new HikariDataSource(config);
             } else {

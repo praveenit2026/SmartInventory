@@ -44,7 +44,19 @@ public class AuthServlet extends HttpServlet {
                 return;
             }
             
-            User user = userDAO.authenticate(username, password);
+            // Handle demo login directly in-memory (no DB required)
+            User user = null;
+            if ("demo".equals(username) && "demo123".equals(password)) {
+                user = new User();
+                user.setId(-1);
+                user.setUsername("demo");
+                user.setPassword("demo123");
+                user.setFullname("Demo User");
+                user.setRole("DEMO");
+                user.setEmail("demo@smartinventory.com");
+            } else {
+                user = userDAO.authenticate(username, password);
+            }
             if (user != null) {
                 HttpSession session = request.getSession(true);
                 session.setAttribute("user", user);

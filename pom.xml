@@ -10,7 +10,7 @@
     <packaging>war</packaging>
 
     <name>Smart Inventory Control System</name>
-    <description>Java-based Smart Inventory Control System running on Tomcat and MySQL</description>
+    <description>Java-based Smart Inventory Control System running on Tomcat and Supabase (PostgreSQL)</description>
 
     <properties>
         <maven.compiler.source>1.8</maven.compiler.source>
@@ -43,11 +43,11 @@
             <version>1.2</version>
         </dependency>
 
-        <!-- MySQL Connector/J -->
+        <!-- PostgreSQL JDBC Driver (Supabase) -->
         <dependency>
-            <groupId>mysql</groupId>
-            <artifactId>mysql-connector-java</artifactId>
-            <version>8.0.28</version>
+            <groupId>org.postgresql</groupId>
+            <artifactId>postgresql</artifactId>
+            <version>42.7.3</version>
         </dependency>
 
         <!-- HikariCP Connection Pool -->

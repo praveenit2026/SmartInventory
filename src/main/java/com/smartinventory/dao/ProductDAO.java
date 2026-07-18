@@ -159,8 +159,8 @@ public class ProductDAO {
         String query = "SELECT " +
                        "(SELECT COUNT(*) FROM products) as total_products, " +
                        "(SELECT COUNT(*) FROM products WHERE stock_quantity <= min_stock_level) as low_stock, " +
-                       "(SELECT COUNT(*) FROM products WHERE expiry_date IS NOT NULL AND expiry_date < CURDATE()) as expired, " +
-                       "(SELECT COUNT(*) FROM products WHERE expiry_date IS NOT NULL AND expiry_date >= CURDATE() AND expiry_date <= DATE_ADD(CURDATE(), INTERVAL 30 DAY)) as near_expiry";
+                       "(SELECT COUNT(*) FROM products WHERE expiry_date IS NOT NULL AND expiry_date < CURRENT_DATE) as expired, " +
+                       "(SELECT COUNT(*) FROM products WHERE expiry_date IS NOT NULL AND expiry_date >= CURRENT_DATE AND expiry_date <= CURRENT_DATE + INTERVAL '30 days') as near_expiry";
         try (Connection con = ConnectionProvider.getConnection();
              PreparedStatement ps = con.prepareStatement(query);
              ResultSet rs = ps.executeQuery()) {
@@ -208,7 +208,7 @@ public class ProductDAO {
 
     public int getExpiredCount() {
         int count = 0;
-        String query = "SELECT COUNT(*) FROM products WHERE expiry_date IS NOT NULL AND expiry_date < CURDATE()";
+        String query = "SELECT COUNT(*) FROM products WHERE expiry_date IS NOT NULL AND expiry_date < CURRENT_DATE";
         try (Connection con = ConnectionProvider.getConnection();
              PreparedStatement ps = con.prepareStatement(query);
              ResultSet rs = ps.executeQuery()) {
@@ -224,7 +224,7 @@ public class ProductDAO {
     public int getNearExpiryCount() {
         int count = 0;
         // Expires in next 30 days but not yet expired
-        String query = "SELECT COUNT(*) FROM products WHERE expiry_date IS NOT NULL AND expiry_date >= CURDATE() AND expiry_date <= DATE_ADD(CURDATE(), INTERVAL 30 DAY)";
+        String query = "SELECT COUNT(*) FROM products WHERE expiry_date IS NOT NULL AND expiry_date >= CURRENT_DATE AND expiry_date <= CURRENT_DATE + INTERVAL '30 days'";
         try (Connection con = ConnectionProvider.getConnection();
              PreparedStatement ps = con.prepareStatement(query);
              ResultSet rs = ps.executeQuery()) {
