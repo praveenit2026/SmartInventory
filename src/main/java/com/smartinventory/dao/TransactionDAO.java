@@ -2,6 +2,8 @@ package com.smartinventory.dao;
 
 import com.smartinventory.model.Transaction;
 import com.smartinventory.util.ConnectionProvider;
+import com.smartinventory.util.DemoData;
+import com.smartinventory.util.UserContext;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -12,6 +14,10 @@ import java.util.List;
 public class TransactionDAO {
 
     public List<Transaction> getAllTransactions() {
+        if (UserContext.isDemo()) {
+            return DemoData.getAllTransactions();
+        }
+
         List<Transaction> list = new ArrayList<>();
         String query = "SELECT t.*, p.name as product_name, p.sku as product_sku, u.fullname as user_fullname FROM transactions t " +
                        "JOIN products p ON t.product_id = p.id " +
@@ -42,6 +48,10 @@ public class TransactionDAO {
     }
 
     public List<Transaction> getRecentTransactions(int limit) {
+        if (UserContext.isDemo()) {
+            return DemoData.getRecentTransactions(limit);
+        }
+
         List<Transaction> list = new ArrayList<>();
         String query = "SELECT t.*, p.name as product_name, p.sku as product_sku, u.fullname as user_fullname FROM transactions t " +
                        "JOIN products p ON t.product_id = p.id " +
@@ -73,6 +83,10 @@ public class TransactionDAO {
     }
 
     public boolean addTransaction(Transaction t) {
+        if (UserContext.isDemo()) {
+            return DemoData.addTransaction(t);
+        }
+
         String insertQuery = "INSERT INTO transactions (product_id, user_id, type, quantity, notes) VALUES (?, ?, ?, ?, ?)";
         String updateProductQuery = "UPDATE products SET stock_quantity = stock_quantity + ? WHERE id = ?";
         

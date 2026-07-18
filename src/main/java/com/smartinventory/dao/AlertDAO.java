@@ -2,16 +2,23 @@ package com.smartinventory.dao;
 
 import com.smartinventory.model.Alert;
 import com.smartinventory.util.ConnectionProvider;
+import com.smartinventory.util.DemoData;
+import com.smartinventory.util.UserContext;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Random;
 
 public class AlertDAO {
 
     public List<Alert> getAllAlerts() {
+        if (UserContext.isDemo()) {
+            return DemoData.getAllAlerts();
+        }
+
         List<Alert> list = new ArrayList<>();
         String query = "SELECT a.*, p.name as product_name, p.sku as product_sku FROM alerts a " +
                        "JOIN products p ON a.product_id = p.id " +
@@ -39,6 +46,14 @@ public class AlertDAO {
     }
 
     public int getUnreadAlertsCount() {
+        if (UserContext.isDemo()) {
+            int count = 0;
+            for (Alert a : DemoData.getAllAlerts()) {
+                if (!a.isRead()) count++;
+            }
+            return count;
+        }
+
         int count = 0;
         String query = "SELECT COUNT(*) FROM alerts WHERE is_read = FALSE";
         try (Connection con = ConnectionProvider.getConnection();
@@ -54,6 +69,14 @@ public class AlertDAO {
     }
 
     public List<Alert> getUnreadAlerts() {
+        if (UserContext.isDemo()) {
+            List<Alert> list = new ArrayList<>();
+            for (Alert a : DemoData.getAllAlerts()) {
+                if (!a.isRead()) list.add(a);
+            }
+            return list;
+        }
+
         List<Alert> list = new ArrayList<>();
         String query = "SELECT a.*, p.name as product_name, p.sku as product_sku FROM alerts a " +
                        "JOIN products p ON a.product_id = p.id " +
@@ -81,6 +104,24 @@ public class AlertDAO {
     }
 
     public boolean addAlertIfNotExists(String type, int productId, String message) {
+        if (UserContext.isDemo()) {
+            // Check if unread alert of same type and product exists in demo data
+            for (Alert a : DemoData.getAllAlerts()) {
+                if (a.getProductId() == productId && a.getType().equals(type) && !a.isRead()) {
+                    return false;
+                }
+            }
+            Alert a = new Alert(
+                new Random().nextInt(1000) + 200,
+                type,
+                productId,
+                message,
+                false,
+                new java.sql.Timestamp(System.currentTimeMillis())
+            );
+            return DemoData.getAllAlerts().add(a);
+        }
+
         // Prevent duplicate unread alerts of the same type for the same product to avoid spamming the dashboard
         String checkQuery = "SELECT COUNT(*) FROM alerts WHERE type = ? AND product_id = ? AND is_read = FALSE";
         String insertQuery = "INSERT INTO alerts (type, product_id, message) VALUES (?, ?, ?)";
@@ -110,6 +151,10 @@ public class AlertDAO {
     }
 
     public boolean markAsRead(int alertId) {
+        if (UserContext.isDemo()) {
+            return DemoData.markAlertAsRead(alertId);
+        }
+
         String query = "UPDATE alerts SET is_read = TRUE WHERE id = ?";
         try (Connection con = ConnectionProvider.getConnection();
              PreparedStatement ps = con.prepareStatement(query)) {
@@ -122,6 +167,13 @@ public class AlertDAO {
     }
 
     public boolean markAllAsRead() {
+        if (UserContext.isDemo()) {
+            for (Alert a : DemoData.getAllAlerts()) {
+                a.setRead(true);
+            }
+            return true;
+        }
+
         String query = "UPDATE alerts SET is_read = TRUE WHERE is_read = FALSE";
         try (Connection con = ConnectionProvider.getConnection();
              PreparedStatement ps = con.prepareStatement(query)) {

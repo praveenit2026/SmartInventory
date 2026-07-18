@@ -2,6 +2,8 @@ package com.smartinventory.dao;
 
 import com.smartinventory.model.Supplier;
 import com.smartinventory.util.ConnectionProvider;
+import com.smartinventory.util.DemoData;
+import com.smartinventory.util.UserContext;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -12,6 +14,10 @@ import java.util.List;
 public class SupplierDAO {
 
     public List<Supplier> getAllSuppliers() {
+        if (UserContext.isDemo()) {
+            return DemoData.getAllSuppliers();
+        }
+
         List<Supplier> suppliers = new ArrayList<>();
         String query = "SELECT * FROM suppliers ORDER BY name ASC";
         try (Connection con = ConnectionProvider.getConnection();
@@ -35,6 +41,10 @@ public class SupplierDAO {
     }
 
     public Supplier getSupplierById(int id) {
+        if (UserContext.isDemo()) {
+            return DemoData.getSupplierById(id);
+        }
+
         Supplier s = null;
         String query = "SELECT * FROM suppliers WHERE id = ?";
         try (Connection con = ConnectionProvider.getConnection();

@@ -2,6 +2,7 @@ package com.smartinventory.dao;
 
 import com.smartinventory.model.User;
 import com.smartinventory.util.ConnectionProvider;
+import com.smartinventory.util.UserContext;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -11,8 +12,21 @@ import java.util.List;
 
 public class UserDAO {
 
-
     public User authenticate(String username, String password) {
+        if (UserContext.isDemo()) {
+            if ("demo".equals(username) && "demo123".equals(password)) {
+                User user = new User();
+                user.setId(-1);
+                user.setUsername("demo");
+                user.setPassword("demo123");
+                user.setFullname("Demo User");
+                user.setRole("DEMO");
+                user.setEmail("demo@smartinventory.com");
+                return user;
+            }
+            return null;
+        }
+
         User user = null;
         String query = "SELECT * FROM users WHERE username = ? AND password = ?";
         try (Connection con = ConnectionProvider.getConnection();
@@ -40,6 +54,20 @@ public class UserDAO {
     }
 
     public User getUserById(int id) {
+        if (UserContext.isDemo()) {
+            if (id == -1) {
+                User user = new User();
+                user.setId(-1);
+                user.setUsername("demo");
+                user.setPassword("demo123");
+                user.setFullname("Demo User");
+                user.setRole("DEMO");
+                user.setEmail("demo@smartinventory.com");
+                return user;
+            }
+            return null;
+        }
+
         User user = null;
         String query = "SELECT * FROM users WHERE id = ?";
         try (Connection con = ConnectionProvider.getConnection();
@@ -66,6 +94,19 @@ public class UserDAO {
     }
 
     public List<User> getAllUsers() {
+        if (UserContext.isDemo()) {
+            List<User> list = new ArrayList<>();
+            User user = new User();
+            user.setId(-1);
+            user.setUsername("demo");
+            user.setPassword("demo123");
+            user.setFullname("Demo User");
+            user.setRole("DEMO");
+            user.setEmail("demo@smartinventory.com");
+            list.add(user);
+            return list;
+        }
+
         List<User> users = new ArrayList<>();
         String query = "SELECT * FROM users ORDER BY fullname ASC";
         try (Connection con = ConnectionProvider.getConnection();

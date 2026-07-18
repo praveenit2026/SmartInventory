@@ -2,6 +2,8 @@ package com.smartinventory.dao;
 
 import com.smartinventory.model.Product;
 import com.smartinventory.util.ConnectionProvider;
+import com.smartinventory.util.DemoData;
+import com.smartinventory.util.UserContext;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -14,6 +16,10 @@ import java.util.Map;
 public class ProductDAO {
 
     public List<Product> getAllProducts() {
+        if (UserContext.isDemo()) {
+            return DemoData.getAllProducts();
+        }
+
         List<Product> list = new ArrayList<>();
         String query = "SELECT p.*, s.name as supplier_name FROM products p " +
                        "LEFT JOIN suppliers s ON p.supplier_id = s.id ORDER BY p.name ASC";
@@ -43,6 +49,10 @@ public class ProductDAO {
     }
 
     public Product getProductById(int id) {
+        if (UserContext.isDemo()) {
+            return DemoData.getProductById(id);
+        }
+
         Product p = null;
         String query = "SELECT p.*, s.name as supplier_name FROM products p " +
                        "LEFT JOIN suppliers s ON p.supplier_id = s.id WHERE p.id = ?";
@@ -73,6 +83,10 @@ public class ProductDAO {
     }
 
     public boolean addProduct(Product p) {
+        if (UserContext.isDemo()) {
+            return DemoData.addProduct(p);
+        }
+
         String query = "INSERT INTO products (sku, name, description, category, price, stock_quantity, min_stock_level, expiry_date, supplier_id) " +
                        "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)";
         try (Connection con = ConnectionProvider.getConnection();
@@ -100,6 +114,10 @@ public class ProductDAO {
     }
 
     public boolean updateProduct(Product p) {
+        if (UserContext.isDemo()) {
+            return DemoData.updateProduct(p);
+        }
+
         String query = "UPDATE products SET sku=?, name=?, description=?, category=?, price=?, stock_quantity=?, min_stock_level=?, expiry_date=?, supplier_id=? " +
                        "WHERE id=?";
         try (Connection con = ConnectionProvider.getConnection();
@@ -128,6 +146,10 @@ public class ProductDAO {
     }
 
     public boolean deleteProduct(int id) {
+        if (UserContext.isDemo()) {
+            return DemoData.deleteProduct(id);
+        }
+
         String query = "DELETE FROM products WHERE id=?";
         try (Connection con = ConnectionProvider.getConnection();
              PreparedStatement ps = con.prepareStatement(query)) {
@@ -140,6 +162,15 @@ public class ProductDAO {
     }
 
     public boolean updateStock(int productId, int quantityChange) {
+        if (UserContext.isDemo()) {
+            Product p = DemoData.getProductById(productId);
+            if (p != null) {
+                p.setStockQuantity(p.getStockQuantity() + quantityChange);
+                return true;
+            }
+            return false;
+        }
+
         String query = "UPDATE products SET stock_quantity = stock_quantity + ? WHERE id = ?";
         try (Connection con = ConnectionProvider.getConnection();
              PreparedStatement ps = con.prepareStatement(query)) {
@@ -155,6 +186,10 @@ public class ProductDAO {
     // --- Metric Queries for Dashboard Analytics ---
 
     public Map<String, Integer> getDashboardMetrics() {
+        if (UserContext.isDemo()) {
+            return DemoData.getDashboardMetrics();
+        }
+
         Map<String, Integer> metrics = new HashMap<>();
         String query = "SELECT " +
                        "(SELECT COUNT(*) FROM products) as total_products, " +
@@ -177,6 +212,10 @@ public class ProductDAO {
     }
 
     public int getTotalProductCount() {
+        if (UserContext.isDemo()) {
+            return DemoData.getAllProducts().size();
+        }
+
         int count = 0;
         String query = "SELECT COUNT(*) FROM products";
         try (Connection con = ConnectionProvider.getConnection();
@@ -192,6 +231,10 @@ public class ProductDAO {
     }
 
     public int getLowStockCount() {
+        if (UserContext.isDemo()) {
+            return DemoData.getDashboardMetrics().getOrDefault("low_stock", 0);
+        }
+
         int count = 0;
         String query = "SELECT COUNT(*) FROM products WHERE stock_quantity <= min_stock_level";
         try (Connection con = ConnectionProvider.getConnection();
@@ -207,6 +250,10 @@ public class ProductDAO {
     }
 
     public int getExpiredCount() {
+        if (UserContext.isDemo()) {
+            return DemoData.getDashboardMetrics().getOrDefault("expired", 0);
+        }
+
         int count = 0;
         String query = "SELECT COUNT(*) FROM products WHERE expiry_date IS NOT NULL AND expiry_date < CURRENT_DATE";
         try (Connection con = ConnectionProvider.getConnection();
@@ -222,6 +269,10 @@ public class ProductDAO {
     }
 
     public int getNearExpiryCount() {
+        if (UserContext.isDemo()) {
+            return DemoData.getDashboardMetrics().getOrDefault("near_expiry", 0);
+        }
+
         int count = 0;
         // Expires in next 30 days but not yet expired
         String query = "SELECT COUNT(*) FROM products WHERE expiry_date IS NOT NULL AND expiry_date >= CURRENT_DATE AND expiry_date <= CURRENT_DATE + INTERVAL '30 days'";
@@ -238,6 +289,10 @@ public class ProductDAO {
     }
 
     public Map<String, Integer> getCategoryDistribution() {
+        if (UserContext.isDemo()) {
+            return DemoData.getCategoryDistribution();
+        }
+
         Map<String, Integer> map = new HashMap<>();
         String query = "SELECT category, COUNT(*) as count FROM products GROUP BY category";
         try (Connection con = ConnectionProvider.getConnection();
