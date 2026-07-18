@@ -112,9 +112,9 @@ public class DemoData {
         p.setId(nextProductId++);
         p.setSupplierName(getSupplierName(p.getSupplierId()));
         products.add(p);
-        
-        // Auto-check for low stock
-        checkLowStockAlert(p);
+
+        // Auto-check for all alert types immediately
+        checkProductAlerts(p);
         return true;
     }
 
@@ -123,7 +123,7 @@ public class DemoData {
             if (products.get(i).getId() == p.getId()) {
                 p.setSupplierName(getSupplierName(p.getSupplierId()));
                 products.set(i, p);
-                checkLowStockAlert(p);
+                checkProductAlerts(p);
                 return true;
             }
         }
@@ -168,7 +168,7 @@ public class DemoData {
                 p.setStockQuantity(p.getStockQuantity() - t.getQuantity());
             }
             transactions.add(t);
-            checkLowStockAlert(p);
+            checkProductAlerts(p);
             return true;
         }
         return false;
@@ -177,6 +177,28 @@ public class DemoData {
     // Alerts API
     public static List<Alert> getAllAlerts() {
         return new ArrayList<>(alerts);
+    }
+
+    /**
+     * Inserts an alert if no unread alert of the same type+product already exists.
+     * Used by AlertDAO to delegate in demo mode.
+     */
+    public static boolean addAlertIfNotExists(String type, int productId, String message) {
+        for (Alert a : alerts) {
+            if (a.getProductId() == productId && a.getType().equals(type) && !a.isRead()) {
+                return false; // Already exists
+            }
+        }
+        Alert a = new Alert(nextAlertId++, type, productId, message, false,
+                new Timestamp(System.currentTimeMillis()));
+        // Try to attach product name/sku for display
+        Product p = getProductById(productId);
+        if (p != null) {
+            a.setProductName(p.getName());
+            a.setSku(p.getSku());
+        }
+        alerts.add(a);
+        return true;
     }
 
     public static boolean markAlertAsRead(int id) {
@@ -236,20 +258,51 @@ public class DemoData {
         return s != null ? s.getName() : "Unknown";
     }
 
-    private static void checkLowStockAlert(Product p) {
+    /**
+     * Checks all alert types (Low Stock, Near Expiry, Expired) for a single product.
+     * Removes stale alerts of each type before re-evaluating.
+     */
+    private static void checkProductAlerts(Product p) {
+        java.time.LocalDate today = java.time.LocalDate.now();
+
+        // --- Low Stock ---
         alerts.removeIf(a -> a.getProductId() == p.getId() && "LOW_STOCK".equals(a.getType()));
         if (p.getStockQuantity() <= p.getMinStockLevel()) {
-            Alert a = new Alert(
-                nextAlertId++, 
-                "LOW_STOCK", 
-                p.getId(), 
-                p.getName() + " is low on stock! Current: " + p.getStockQuantity() + ", Min required: " + p.getMinStockLevel(),
-                false,
-                new Timestamp(System.currentTimeMillis())
-            );
+            Alert a = new Alert(nextAlertId++, "LOW_STOCK", p.getId(),
+                    p.getName() + " is low on stock! Current: " + p.getStockQuantity() + ", Min required: " + p.getMinStockLevel(),
+                    false, new Timestamp(System.currentTimeMillis()));
             a.setProductName(p.getName());
             a.setSku(p.getSku());
             alerts.add(a);
+        }
+
+        // --- Expiry ---
+        if (p.getExpiryDate() != null) {
+            java.time.LocalDate expiry = p.getExpiryDate().toLocalDate();
+
+            // Remove any existing NEAR_EXPIRY / EXPIRED alerts for re-evaluation
+            alerts.removeIf(a -> a.getProductId() == p.getId()
+                    && ("NEAR_EXPIRY".equals(a.getType()) || "EXPIRED".equals(a.getType())));
+
+            if (expiry.isBefore(today)) {
+                Alert a = new Alert(nextAlertId++, "EXPIRED", p.getId(),
+                        "Product expired! " + p.getName() + " expired on " + p.getExpiryDate(),
+                        false, new Timestamp(System.currentTimeMillis()));
+                a.setProductName(p.getName());
+                a.setSku(p.getSku());
+                alerts.add(a);
+            } else {
+                long daysLeft = java.time.temporal.ChronoUnit.DAYS.between(today, expiry);
+                if (daysLeft <= 30) {
+                    Alert a = new Alert(nextAlertId++, "NEAR_EXPIRY", p.getId(),
+                            "Product near expiry! " + p.getName() + " expires in " + daysLeft + " days ("
+                                    + p.getExpiryDate() + ").",
+                            false, new Timestamp(System.currentTimeMillis()));
+                    a.setProductName(p.getName());
+                    a.setSku(p.getSku());
+                    alerts.add(a);
+                }
+            }
         }
     }
 }

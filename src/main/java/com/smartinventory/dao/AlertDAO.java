@@ -10,7 +10,6 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Random;
 
 public class AlertDAO {
 
@@ -105,21 +104,7 @@ public class AlertDAO {
 
     public boolean addAlertIfNotExists(String type, int productId, String message) {
         if (UserContext.isDemo()) {
-            // Check if unread alert of same type and product exists in demo data
-            for (Alert a : DemoData.getAllAlerts()) {
-                if (a.getProductId() == productId && a.getType().equals(type) && !a.isRead()) {
-                    return false;
-                }
-            }
-            Alert a = new Alert(
-                new Random().nextInt(1000) + 200,
-                type,
-                productId,
-                message,
-                false,
-                new java.sql.Timestamp(System.currentTimeMillis())
-            );
-            return DemoData.getAllAlerts().add(a);
+            return DemoData.addAlertIfNotExists(type, productId, message);
         }
 
         // Prevent duplicate unread alerts of the same type for the same product to avoid spamming the dashboard
