@@ -37,6 +37,8 @@ public class ConnectionProvider {
                 config.setMaxLifetime(1800000); // 30 minutes
                 // Avoid failing deployment if database is temporarily offline
                 config.setInitializationFailTimeout(-1);
+                // Fail fast if database is unreachable (3 seconds instead of 30)
+                config.setConnectionTimeout(3000);
 
                 // PostgreSQL connection optimizations
                 config.addDataSourceProperty("reWriteBatchedInserts", "true");
