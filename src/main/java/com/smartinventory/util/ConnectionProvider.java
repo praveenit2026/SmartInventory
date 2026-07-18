@@ -35,18 +35,19 @@ public class ConnectionProvider {
                 config.setMinimumIdle(3);
                 config.setIdleTimeout(300000); // 5 minutes
                 config.setMaxLifetime(1800000); // 30 minutes
-                config.setConnectionTimeout(10000); // 10 seconds
+                // Avoid failing deployment if database is temporarily offline
+                config.setInitializationFailTimeout(-1);
 
                 // PostgreSQL connection optimizations
                 config.addDataSourceProperty("reWriteBatchedInserts", "true");
 
                 dataSource = new HikariDataSource(config);
             } else {
-                throw new RuntimeException("db.properties file not found in classpath!");
+                System.err.println("db.properties file not found in classpath!");
             }
         } catch (Exception e) {
+            System.err.println("Error initializing database ConnectionProvider: " + e.getMessage());
             e.printStackTrace();
-            throw new RuntimeException("Error initializing database ConnectionProvider: " + e.getMessage());
         }
     }
 
