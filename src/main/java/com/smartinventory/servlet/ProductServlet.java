@@ -4,6 +4,8 @@ import com.smartinventory.dao.ProductDAO;
 import com.smartinventory.dao.SupplierDAO;
 import com.smartinventory.model.Product;
 import com.smartinventory.model.User;
+import com.smartinventory.service.AlertScheduler;
+import com.smartinventory.util.UserContext;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
@@ -103,6 +105,10 @@ public class ProductServlet extends HttpServlet {
                     result = productDAO.addProduct(p);
                     if (result) {
                         request.setAttribute("success", "Product added successfully.");
+                        // Immediately check alerts for the new product (no need to wait for scheduler)
+                        if (!UserContext.isDemo()) {
+                            AlertScheduler.checkSingleProduct(p);
+                        }
                     } else {
                         request.setAttribute("error", "Failed to add product. SKU may already exist.");
                     }
@@ -111,6 +117,10 @@ public class ProductServlet extends HttpServlet {
                     result = productDAO.updateProduct(p);
                     if (result) {
                         request.setAttribute("success", "Product updated successfully.");
+                        // Immediately re-check alerts when product is edited (e.g. expiry date changed)
+                        if (!UserContext.isDemo()) {
+                            AlertScheduler.checkSingleProduct(p);
+                        }
                     } else {
                         request.setAttribute("error", "Failed to update product.");
                     }
